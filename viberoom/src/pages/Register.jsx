@@ -57,6 +57,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword || !uploadedImage) {
+      toast.error("All fields are required, including avatar.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords don't match!");
       return;
@@ -70,10 +75,7 @@ function Register() {
       data.append('username', formData.username);
       data.append('email', formData.email);
       data.append('password', formData.password);
-
-      if (uploadedImage) {
-        data.append('avatar', uploadedImage);
-      }
+      data.append('avatar', uploadedImage);
 
       const response = await api.post("/api/v1/users/register", data,{
         headers: {
@@ -214,7 +216,7 @@ function Register() {
                     >
                       <Upload className="w-6 h-6 text-muted-foreground" />
                       <span className="text-sm text-muted-foreground">Upload Image</span>
-                      <span className="text-xs text-muted-foreground">(Max 5MB)</span>
+                      <span className="text-xs text-muted-foreground">(Max 1MB)</span>
                     </label>
                     <input
                       id="avatar-upload"
